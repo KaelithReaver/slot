@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmojiSlots — 3-Reel Arcade Slot Machine</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23111118%22 stroke=%22%23f59e0b%22 stroke-width=%228%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2258%22>🎰</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="vegas">
+  <main class="arcade-wrapper">
+    <!-- Top Customization & Audio Bar -->
+    <section class="cabinet-toolbar" aria-label="Arcade customization controls">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Cabinet</span>
+        <div class="pill-toggles" id="theme-toggles">
+          <button type="button" data-theme="vegas" class="active">Vegas Gold</button>
+          <button type="button" data-theme="cyber">Cyberpunk</button>
+          <button type="button" data-theme="tokyo">Tokyo</button>
+          <button type="button" data-theme="matrix">Matrix</button>
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <span class="toolbar-label">Deck</span>
+        <div class="pill-toggles" id="deck-toggles">
+          <button type="button" data-deck="classic" class="active">Classic</button>
+          <button type="button" data-deck="cyber">Tech</button>
+          <button type="button" data-deck="fruits">Fruits</button>
+        </div>
+      </div>
+
+      <button type="button" id="sound-toggle" class="btn-sound" aria-pressed="true">
+        SFX: ON 🔊
+      </button>
+    </section>
+
+    <!-- Main Arcade Cabinet -->
+    <article class="arcade-cabinet" id="arcade-cabinet">
+      <!-- Marquee Light Header -->
+      <header class="cabinet-header">
+        <div class="marquee-lights" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <h1 class="arcade-title">EMOJISLOTS</h1>
+        <p class="arcade-subtitle">3-WAY MATCH PAYS +100 PTS</p>
+      </header>
+
+      <!-- Scoreboard & Telemetry Cards -->
+      <section class="scoreboard-grid" aria-label="Player scoreboard">
+        <div class="score-card primary-score">
+          <span class="score-label">Balance</span>
+          <div class="score-value"><span id="score-display">100</span> <small>PTS</small></div>
+        </div>
+        <div class="score-card">
+          <span class="score-label">Spin Cost</span>
+          <div class="score-value cost-text">-10 <small>PTS</small></div>
+        </div>
+        <div class="score-card">
+          <span class="score-label">Jackpots</span>
+          <div class="score-value" id="jackpot-count">0</div>
+        </div>
+        <div class="score-card">
+          <span class="score-label">Total Spins</span>
+          <div class="score-value" id="spin-count">0</div>
+        </div>
+      </section>
+
+      <!-- Status / Jackpot Banner -->
+      <div id="status-banner" class="status-banner" role="status" aria-live="polite">
+        INSERT 10 PTS — PRESS SPIN OR SPACEBAR TO ROLL
+      </div>
+
+      <!-- 3-Reel Slot Window -->
+      <section class="reel-housing" aria-label="Slot machine reels">
+        <div class="payline-indicator left" aria-hidden="true">▶</div>
+        <div class="reels-grid">
+          <div class="reel-frame">
+            <div id="reel-1" class="reel-box">🍒</div>
+          </div>
+          <div class="reel-frame">
+            <div id="reel-2" class="reel-box">💎</div>
+          </div>
+          <div class="reel-frame">
+            <div id="reel-3" class="reel-box">7️⃣</div>
+          </div>
+        </div>
+        <div class="payline-indicator right" aria-hidden="true">◀</div>
+      </section>
+
+      <!-- Payout Legend -->
+      <div class="payout-strip">
+        <span>🍒 🍋 🔔 ⭐ 💎 7️⃣</span>
+        <span class="divider">•</span>
+        <span>3 MATCH = <strong>+100 JACKPOT</strong></span>
+      </div>
+
+      <!-- Arcade Control Deck -->
+      <footer class="control-deck">
+        <button type="button" id="spin-btn" class="btn-spin">
+          SPIN REELS (-10)
+        </button>
+        <button type="button" id="reset-btn" class="btn-insert">
+          INSERT COIN (RESET 100)
+        </button>
+      </footer>
+    </article>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
