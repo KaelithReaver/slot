@@ -1,111 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="vegas">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmojiSlots — 3-Reel Arcade Slot Machine</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23111118%22 stroke=%22%23f59e0b%22 stroke-width=%228%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2258%22>🎰</text></svg>">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUCKY-3 // Mechanical Arcade Slot Cabinet</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body data-theme="vegas">
-  <main class="arcade-wrapper">
-    <!-- Top Customization & Audio Bar -->
-    <section class="cabinet-toolbar" aria-label="Arcade customization controls">
-      <div class="toolbar-group">
-        <span class="toolbar-label">Cabinet</span>
-        <div class="pill-toggles" id="theme-toggles">
-          <button type="button" data-theme="vegas" class="active">Vegas Gold</button>
-          <button type="button" data-theme="cyber">Cyberpunk</button>
-          <button type="button" data-theme="tokyo">Tokyo</button>
-          <button type="button" data-theme="matrix">Matrix</button>
-        </div>
+<body>
+  <div class="arcade-room">
+    <!-- Celebratory Particle Canvas (Jackpot / Coin Sparks) -->
+    <canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
+
+    <!-- Top Cabinet Selector & Audio Bar -->
+    <header class="cabinet-topbar">
+      <div class="topbar-brand">
+        <span class="brand-badge">ARC-03</span>
+        <span class="brand-title">TRIPLE STRIKE</span>
       </div>
 
-      <div class="toolbar-group">
-        <span class="toolbar-label">Deck</span>
-        <div class="pill-toggles" id="deck-toggles">
-          <button type="button" data-deck="classic" class="active">Classic</button>
-          <button type="button" data-deck="cyber">Tech</button>
-          <button type="button" data-deck="fruits">Fruits</button>
+      <div class="topbar-controls">
+        <!-- Theme Switcher -->
+        <div class="control-cluster" role="group" aria-label="Cabinet Theme">
+          <span class="cluster-label">CABINET</span>
+          <button type="button" class="pill-btn active" data-theme-btn="vegas">
+            <span class="theme-dot dot-vegas"></span>Vegas Gold
+          </button>
+          <button type="button" class="pill-btn" data-theme-btn="cyberpunk">
+            <span class="theme-dot dot-cyberpunk"></span>Cyberpunk
+          </button>
+          <button type="button" class="pill-btn" data-theme-btn="tokyo">
+            <span class="theme-dot dot-tokyo"></span>Tokyo Arcade
+          </button>
+          <button type="button" class="pill-btn" data-theme-btn="matrix">
+            <span class="theme-dot dot-matrix"></span>Matrix
+          </button>
         </div>
-      </div>
 
-      <button type="button" id="sound-toggle" class="btn-sound" aria-pressed="true">
-        SFX: ON 🔊
-      </button>
-    </section>
-
-    <!-- Main Arcade Cabinet -->
-    <article class="arcade-cabinet" id="arcade-cabinet">
-      <!-- Marquee Light Header -->
-      <header class="cabinet-header">
-        <div class="marquee-lights" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        <!-- Symbol Deck Switcher -->
+        <div class="control-cluster" role="group" aria-label="Symbol Deck">
+          <span class="cluster-label">DECK</span>
+          <button type="button" class="pill-btn active" data-deck-btn="classic">7️⃣ Classic</button>
+          <button type="button" class="pill-btn" data-deck-btn="tech">💻 Tech</button>
+          <button type="button" class="pill-btn" data-deck-btn="fruits">🍒 Fruits</button>
         </div>
-        <h1 class="arcade-title">EMOJISLOTS</h1>
-        <p class="arcade-subtitle">3-WAY MATCH PAYS +100 PTS</p>
-      </header>
 
-      <!-- Scoreboard & Telemetry Cards -->
-      <section class="scoreboard-grid" aria-label="Player scoreboard">
-        <div class="score-card primary-score">
-          <span class="score-label">Balance</span>
-          <div class="score-value"><span id="score-display">100</span> <small>PTS</small></div>
-        </div>
-        <div class="score-card">
-          <span class="score-label">Spin Cost</span>
-          <div class="score-value cost-text">-10 <small>PTS</small></div>
-        </div>
-        <div class="score-card">
-          <span class="score-label">Jackpots</span>
-          <div class="score-value" id="jackpot-count">0</div>
-        </div>
-        <div class="score-card">
-          <span class="score-label">Total Spins</span>
-          <div class="score-value" id="spin-count">0</div>
-        </div>
-      </section>
-
-      <!-- Status / Jackpot Banner -->
-      <div id="status-banner" class="status-banner" role="status" aria-live="polite">
-        INSERT 10 PTS — PRESS SPIN OR SPACEBAR TO ROLL
-      </div>
-
-      <!-- 3-Reel Slot Window -->
-      <section class="reel-housing" aria-label="Slot machine reels">
-        <div class="payline-indicator left" aria-hidden="true">▶</div>
-        <div class="reels-grid">
-          <div class="reel-frame">
-            <div id="reel-1" class="reel-box">🍒</div>
-          </div>
-          <div class="reel-frame">
-            <div id="reel-2" class="reel-box">💎</div>
-          </div>
-          <div class="reel-frame">
-            <div id="reel-3" class="reel-box">7️⃣</div>
-          </div>
-        </div>
-        <div class="payline-indicator right" aria-hidden="true">◀</div>
-      </section>
-
-      <!-- Payout Legend -->
-      <div class="payout-strip">
-        <span>🍒 🍋 🔔 ⭐ 💎 7️⃣</span>
-        <span class="divider">•</span>
-        <span>3 MATCH = <strong>+100 JACKPOT</strong></span>
-      </div>
-
-      <!-- Arcade Control Deck -->
-      <footer class="control-deck">
-        <button type="button" id="spin-btn" class="btn-spin">
-          SPIN REELS (-10)
+        <!-- Mute Toggle -->
+        <button type="button" id="muteBtn" class="mute-btn" aria-pressed="false" title="Toggle Web Audio Sound Effects">
+          <svg class="icon-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path class="wave" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path class="wave" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <span id="muteLabel">SFX ON</span>
         </button>
-        <button type="button" id="reset-btn" class="btn-insert">
-          INSERT COIN (RESET 100)
-        </button>
-      </footer>
-    </article>
-  </main>
+      </div>
+    </header>
+
+    <!-- Main Arcade Machine Assembly (Cabinet + Interactive Pull Lever) -->
+    <main class="machine-stage">
+      <div class="cabinet-wrapper">
+        <!-- Left/Main Arcade Cabinet -->
+        <section class="slot-cabinet" id="slotCabinet" aria-label="3-Reel Arcade Slot Machine">
+          <!-- Top Chasing Bulb Marquee -->
+          <div class="marquee-hood">
+            <div class="bulb-row" id="bulbRowTop" aria-hidden="true"></div>
+            <div class="marquee-plate">
+              <div class="marquee-sub">3-REEL MECHANICAL EDITION</div>
+              <h1 class="marquee-heading" id="marqueeHeading">JACKPOT 100 CR</h1>
+              <div class="marquee-status-bar" id="marqueeStatusBar">
+                PULL THE LEVER TO ENGAGE REELS
+              </div>
+            </div>
+            <div class="bulb-row" id="bulbRowBottom" aria-hidden="true"></div>
+          </div>
+
+          <!-- Digital Telemetry & Credits Strip -->
+          <div class="hud-strip">
+            <div class="hud-cell">
+              <span class="hud-label">CREDITS</span>
+              <span class="hud-readout" id="creditsReadout">100</span>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">SPIN COST</span>
+              <span class="hud-readout" id="costReadout">10</span>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">LAST WIN</span>
+              <span class="hud-readout highlight" id="lastWinReadout">0</span>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">SPINS</span>
+              <span class="hud-readout" id="spinsReadout">0</span>
+            </div>
+          </div>
+
+          <!-- Paytable Ribbon -->
+          <div class="paytable-strip" aria-label="Payout Rules">
+            <div class="pay-item jackpot-rule">
+              <span class="pay-tag">3× MATCH</span>
+              <span class="pay-val">+100 CR JACKPOT</span>
+            </div>
+            <div class="pay-item nearmiss-rule">
+              <span class="pay-tag">2× MATCH</span>
+              <span class="pay-val">NEAR MISS (+2 CR)</span>
+            </div>
+            <div class="pay-item deck-preview" id="deckPreview"></div>
+          </div>
+
+          <!-- 3-Reel Mechanical Window -->
+          <div class="reel-bezel">
+            <!-- Center Payline Indicator -->
+            <div class="payline-marker left" aria-hidden="true">▶</div>
+            <div class="payline-marker right" aria-hidden="true">◀</div>
+            <div class="payline-beam" id="paylineBeam" aria-hidden="true"></div>
+
+            <!-- Celebratory / Near Miss / Game Over Overlay Banner -->
+            <div class="outcome-banner hidden" id="outcomeBanner" role="status" aria-live="polite">
+              <span class="outcome-title" id="outcomeTitle">JACKPOT!</span>
+              <span class="outcome-sub" id="outcomeSub">+100 CREDITS AWARDED</span>
+            </div>
+
+            <div class="reels-grid">
+              <div class="reel-slot" data-reel-index="0">
+                <div class="reel-drum" id="reel0"></div>
+                <div class="reel-glass" aria-hidden="true"></div>
+              </div>
+              <div class="reel-slot" data-reel-index="1">
+                <div class="reel-drum" id="reel1"></div>
+                <div class="reel-glass" aria-hidden="true"></div>
+              </div>
+              <div class="reel-slot" data-reel-index="2">
+                <div class="reel-drum" id="reel2"></div>
+                <div class="reel-glass" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <!-- Individual Skill Slam-Stop Buttons -->
+            <div class="reel-stop-row">
+              <button type="button" class="slam-btn" data-stop-reel="0" disabled>STOP 1</button>
+              <button type="button" class="slam-btn" data-stop-reel="1" disabled>STOP 2</button>
+              <button type="button" class="slam-btn" data-stop-reel="2" disabled>STOP 3</button>
+            </div>
+          </div>
+
+          <!-- Lower Control Deck -->
+          <div class="control-deck">
+            <div class="deck-left">
+              <!-- Bet / Cost Selector -->
+              <div class="bet-selector" role="group" aria-label="Spin Cost">
+                <span class="deck-mini-label">WAGER</span>
+                <div class="bet-pills">
+                  <button type="button" class="bet-btn" data-bet="5">5</button>
+                  <button type="button" class="bet-btn active" data-bet="10">10</button>
+                  <button type="button" class="bet-btn" data-bet="20">20</button>
+                </div>
+              </div>
+
+              <!-- Interactive Coin Slot -->
+              <div class="coin-door" title="Mechanical Coin Return">
+                <div class="coin-slot-slit"></div>
+                <span class="coin-slot-label">10¢ TOKEN</span>
+              </div>
+            </div>
+
+            <div class="deck-actions">
+              <button type="button" id="spinBtn" class="arcade-spin-btn">
+                <span class="btn-cap">PULL / SPIN</span>
+                <span class="btn-sub" id="spinBtnSub">-10 CR</span>
+              </button>
+
+              <button type="button" id="resetBtn" class="reload-btn hidden">
+                <span>RELOAD CREDITS / RESET</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Coin Tray & Recent Spin Log -->
+          <footer class="coin-tray">
+            <div class="tray-well">
+              <span class="tray-label">SESSION LOG</span>
+              <div class="history-strip" id="historyStrip">
+                <span class="history-empty">Grab the lever or press Space to spin</span>
+              </div>
+            </div>
+          </footer>
+        </section>
+
+        <!-- Physical Side-Mounted Pull Lever Assembly -->
+        <aside class="lever-housing" id="leverHousing" aria-label="Mechanical Slot Lever">
+          <div class="lever-mount-plate">
+            <div class="lever-bolts">
+              <span></span><span></span>
+            </div>
+            <div class="lever-track-slot">
+              <div class="lever-tension-fill" id="leverTensionFill"></div>
+            </div>
+            <div class="lever-arm-pivot" id="leverArmPivot">
+              <div class="lever-shaft" id="leverShaft"></div>
+              <button
+                type="button"
+                class="lever-knob"
+                id="leverKnob"
+                aria-label="Drag down or click to pull slot lever"
+                title="Drag down to pull lever!"
+              >
+                <span class="knob-shine"></span>
+                <span class="knob-tag">PULL</span>
+              </button>
+            </div>
+            <div class="lever-guide-text" id="leverGuideText">
+              DRAG<br />DOWN
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- Bottom Keyboard Hints -->
+    <div class="footer-hints">
+      <span><kbd>DRAG LEVER</kbd> pull arm down past latch</span>
+      <span><kbd>SPACE</kbd> quick pull</span>
+      <span><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> slam-stop reels mid-spin</span>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
